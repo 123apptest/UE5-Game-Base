@@ -31,6 +31,7 @@ ASlashCharacter::ASlashCharacter()
 	Hair = CreateDefaultSubobject<UGroomComponent>(TEXT("Hair"));
 	Hair->SetupAttachment(GetMesh());
 	Hair->AttachmentName = FString("head");
+	//如果是骨架的头发，可以创建骨架mesh，添加动画蓝图即可
 
 	Eyebrows = CreateDefaultSubobject<UGroomComponent>(TEXT("Eyebrows"));
 	Eyebrows->SetupAttachment(GetMesh());
@@ -60,6 +61,8 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &ASlashCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(FName("Turn"), this, &ASlashCharacter::Turn);
 	PlayerInputComponent->BindAxis(FName("LookUp"), this, &ASlashCharacter::LookUp);
+
+	PlayerInputComponent->BindAction(FName("Jump"),IE_Pressed, this, &ACharacter::Jump);
 }
 
 void ASlashCharacter::MoveForward(float Value)
