@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Items.generated.h"
 
+class USphereComponent;
+
 UCLASS()
 class SPLASH_API AItems : public AActor
 {
@@ -38,6 +40,16 @@ protected:
 	template<typename T> //这个属于模板功能，可以把他定义为其他的，看 .cpp 例子, 但是不支持除法 "/"在rotator
 	T Avg(T First, T Second);
 
+	UFUNCTION()
+	//PrimitiveComponent.h   的 继承， 查找 OnComponentBeginOverlap 
+	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	// 只有void 子类会直接父类， 加virtual 和 子类末尾 override 覆盖则可以分开功能
+	//void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		//PrimitiveComponent.h   的 继承， 查找 OnSphereEndOverlap
+	virtual void OnSphereEndOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 private:
 	//UPROPERTY(VisibleDefaultsOnly) //默认在蓝图内可见，不可修改
 	//UPROPERTY(VisibleInstanceOnly) //默认在世界中可见，不可修改
@@ -45,8 +57,13 @@ private:
 	//UPROPERTY(EditInstanceOnly) //在世界里可修改，实例不同
 	//UPROPERTY(EditAnyWhere) // 所有地方可修改，但是蓝图修改的是默认值，世界实例的修改可以覆盖默认值
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		//蓝图世界皆可见，不可修改, 但是meta设置是公开其变量
-		float RunningTime;
+		float RunningTime;	//蓝图世界皆可见，不可修改, 但是meta设置是公开其变量
+		
+	UPROPERTY(VisibleAnywhere)
+		UStaticMeshComponent* ItemMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	USphereComponent* Sphere;
 
 };
 

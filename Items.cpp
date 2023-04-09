@@ -3,6 +3,8 @@
 
 #include "Items/Items.h"
 
+#include "Components/SphereComponent.h"
+
 
 #define THIRTY 30
 //定义的东西也可以写在 "项目名.h" 里面,但是这里要include进来
@@ -15,7 +17,13 @@ AItems::AItems() //: Amplitude(0.25f) //初始化数值方法1
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMeshComponent"));
+	RootComponent = ItemMesh;
+
 	//float Amplitude = 0.25f;//初始化数值方法2,赋值
+
+	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
+	Sphere -> SetupAttachment(GetRootComponent());
 
 }
 
@@ -24,12 +32,15 @@ void AItems::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AItems::OnSphereOverlap);
+	Sphere->OnComponentEndOverlap.AddDynamic(this, &AItems::OnSphereEndOverlap);
+
 	// 模板函数在此，不同定义
-	int32 AvgInt = Avg<int32>(1, 3);
+	/*int32 AvgInt = Avg<int32>(1, 3);
 	UE_LOG(LogTemp, Warning, TEXT("Avg of 1 and 3 : %d"), AvgInt);
 
 	float AvgFloat = Avg<float>(3.14, 6.14);
-	UE_LOG(LogTemp, Warning, TEXT("Avg of 3.14 and 6.14 : %f"), AvgFloat);
+	UE_LOG(LogTemp, Warning, TEXT("Avg of 3.14 and 6.14 : %f"), AvgFloat);*/
 
 	/*在log输出
 	UE_LOG(LogTemp, Warning, TEXT("begin play called !"));
@@ -82,6 +93,23 @@ float AItems::TransformedCos()
 {
 	return Amplitude * FMath::Cos(RunningTime * TimeConstant);
 }
+void AItems::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	const FString OtherActorName = OtherActor->GetName();
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(1,30.f,FColor::Red,OtherActorName);
+	}
+
+}
+void AItems::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	const FString OtherActorName = FString("Ending Overlap with :")+ OtherActor->GetName();
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Blue, OtherActorName);
+	}
+}
 /*float AItems::TransformedSin(float Value)
 {
 	return Amplitude * FMath::Sin(Value * TimeConstant);
@@ -115,13 +143,13 @@ void AItems::Tick(float DeltaTime)
 	//				 时长							振幅
 	//float DeltaZ = Amplitude * FMath::Sin(RunningTime * TimeConstant);
 	//AddActorWorldOffset(FVector(0.f, 0.f, DeltaZ));
-
+	/*
 	FVector AvgVector = Avg<FVector>(GetActorLocation(),FVector::ZeroVector);
 	DRAW_POINT_SingleFrame(AvgVector);
 
 	DRAW_SPHERE_SingleFrame(GetActorLocation());
 	DRAW_VECTOR_SingleFrame(GetActorLocation(), GetActorLocation()+GetActorForwardVector()*100.f);
-
+	*/
 
 }
 
