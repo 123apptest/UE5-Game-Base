@@ -1,8 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterType.h"
 #include "Animation/AnimInstance.h"
 #include "SlashAnimInstance.generated.h"
 
@@ -13,9 +14,9 @@ UCLASS()
 class SPLASH_API USlashAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-
+	
 public:
-	virtual void NativeInitializeAnimation() override;//��ʼ��
+	virtual void NativeInitializeAnimation() override;//³õÊ¼»¯
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
 
 	UPROPERTY(BlueprintReadOnly)
@@ -30,4 +31,6 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
 		bool IsFalling;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Movement | Character State")
+	ECharacterState CharacterState;
 };
