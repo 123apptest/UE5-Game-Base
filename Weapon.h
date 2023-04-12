@@ -13,10 +13,16 @@ UCLASS()
 class SPLASH_API AWeapon : public AItems
 {
 	GENERATED_BODY()
+
+public:
+	void Equip(USceneComponent* InParent, FName InSocketName);
+	
 protected://后面加 override 覆盖父类，不继承
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)override;
 
-	
+
 };
+
+

@@ -7,9 +7,11 @@
 #include "SlashCharacter.generated.h"
 
 
+
 class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
+class AItems;
 
 UCLASS()
 class SPLASH_API ASlashCharacter : public ACharacter
@@ -19,19 +21,21 @@ class SPLASH_API ASlashCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ASlashCharacter();
-	// Called every frame
+
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
 protected:
-	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Turn(float Value);
 	void LookUp(float Value);
+	void EKeyPressed();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 		USpringArmComponent* SpringArm;
@@ -39,9 +43,14 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		UCameraComponent* ViewCamera;
 
-	UPROPERTY(VisibleAnywhere, Category = Hair )
+	UPROPERTY(VisibleAnywhere, Category = Hair)
 		UGroomComponent* Hair;
 
 	UPROPERTY(VisibleAnywhere, Category = Hair)
 		UGroomComponent* Eyebrows;
+	
+	UPROPERTY(VisibleInstanceOnly)
+		AItems* OverlappingItem;
+public:
+	FORCEINLINE void SetOverlappingItem(AItems* Item) { OverlappingItem = Item; }
 };
