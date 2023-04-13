@@ -13,6 +13,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
 class AItems;
+class UAnimMontage;
 
 
 
@@ -33,14 +34,31 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	/*
+		Callbacks for input
+	*/
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Turn(float Value);
 	void LookUp(float Value);
 	void EKeyPressed();
+	void Attack();
+
+	/*
+		Play Montage Function
+	*/
+	void playAttackMontage();
+
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
+	bool CanAttack();
 
 private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	EActionState ActionState = EActionState::EAS_Unoccupied;  
 
 	UPROPERTY(VisibleAnywhere)
 		USpringArmComponent* SpringArm;
@@ -56,6 +74,14 @@ private:
 	
 	UPROPERTY(VisibleInstanceOnly)
 		AItems* OverlappingItem;
+
+	/*
+			Animation Montages
+	*/
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+		UAnimMontage* AttackMontage;
+
+
 public:
 	FORCEINLINE void SetOverlappingItem(AItems* Item) { OverlappingItem = Item; }
 	FORCEINLINE ECharacterState GetCharacterState() const{ return CharacterState; }
