@@ -8,28 +8,32 @@
 
 class USphereComponent;
 
+enum class EItemState : uint8
+{
+	EIS_Hovering,
+	EIS_Equipped
+};
+
 UCLASS()
 class SPLASH_API AItems : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
+	
 	AItems();
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//UPROPERTY(EditAnyWhere,BlueprintReadOnly) // 蓝图变量可读
-	UPROPERTY(EditAnyWhere,BlueprintReadWrite, Category = "Sine Parameters") // 蓝图变量可读可写,分类于"Sine Parameters"
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Sine Parameters") // 蓝图变量可读可写,分类于"Sine Parameters"
 		float Amplitude = 1.f;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Sine Parameters") // 蓝图变量可读可写,分类于"Sine Parameters"
 		float TimeConstant = 5.f;
 
-	/*UFUNCTION(BlueprintCallable)   //功能创建在  .cpp 里，蓝图内功能可调动 
+	/*UFUNCTION(BlueprintCallable)   //功能创建在  .cpp 里，蓝图内功能可调动
 		float TransformedSin(float Value);*/
 	UFUNCTION(BlueprintPure)   //变成一种单纯计算的，调用函数
 		float TransformedSin();
@@ -41,14 +45,19 @@ protected:
 	T Avg(T First, T Second);
 
 	UFUNCTION()
-	//PrimitiveComponent.h   的 继承， 查找 OnComponentBeginOverlap 
-	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		//PrimitiveComponent.h   的 继承， 查找 OnComponentBeginOverlap 
+		virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	// 只有void 子类会直接父类， 加virtual 和 子类末尾 override 覆盖则可以分开功能
 	//void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
 		//PrimitiveComponent.h   的 继承， 查找 OnSphereEndOverlap
-	virtual void OnSphereEndOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+		virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+		UStaticMeshComponent* ItemMesh;
+
+	EItemState ItemState = EItemState::EIS_Hovering;
 
 private:
 	//UPROPERTY(VisibleDefaultsOnly) //默认在蓝图内可见，不可修改
@@ -58,17 +67,17 @@ private:
 	//UPROPERTY(EditAnyWhere) // 所有地方可修改，但是蓝图修改的是默认值，世界实例的修改可以覆盖默认值
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		float RunningTime;	//蓝图世界皆可见，不可修改, 但是meta设置是公开其变量
-		
-	UPROPERTY(VisibleAnywhere)
-		UStaticMeshComponent* ItemMesh;
+
+	
 
 	UPROPERTY(VisibleAnywhere)
-	USphereComponent* Sphere;
+		USphereComponent* Sphere;
 
 };
 
 template<typename T>
 inline T AItems::Avg(T First, T Second)
 {
-	return (First + Second)/2;
+	return (First + Second) / 2;
 }
+
