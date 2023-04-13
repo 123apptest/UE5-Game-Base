@@ -74,6 +74,7 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 }
 void ASlashCharacter::MoveForward(float Value)
 {
+	if (ActionState == EActionState::EAS_Attacking) return;
 	if (Controller && (Value != 0.f)) // (Controller != nullptr) = Controller
 	{
 		//判断哪一个位置才是前面
@@ -89,6 +90,7 @@ void ASlashCharacter::MoveForward(float Value)
 
 void ASlashCharacter::MoveRight(float Value)
 {
+	if (ActionState == EActionState::EAS_Attacking) return;
 	if (Controller && (Value != 0.f)) // (Controller != nullptr) = Controller
 	{
 		//判断哪一个位置才是右面
