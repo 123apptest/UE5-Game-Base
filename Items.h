@@ -59,6 +59,8 @@ protected:
 
 	EItemState ItemState = EItemState::EIS_Hovering;
 
+	UPROPERTY(VisibleAnywhere)
+		USphereComponent* Sphere;
 private:
 	//UPROPERTY(VisibleDefaultsOnly) //默认在蓝图内可见，不可修改
 	//UPROPERTY(VisibleInstanceOnly) //默认在世界中可见，不可修改
@@ -70,8 +72,7 @@ private:
 
 	
 
-	UPROPERTY(VisibleAnywhere)
-		USphereComponent* Sphere;
+
 
 };
 
