@@ -16,6 +16,8 @@ class SPLASH_API AWeapon : public AItems
 
 public:
 	void Equip(USceneComponent* InParent, FName InSocketName);
+
+	void AttachMeshToSocket(USceneComponent* InParent, const FName& InSocketName);
 	
 protected://后面加 override 覆盖父类，不继承
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
